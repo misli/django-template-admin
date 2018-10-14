@@ -1,0 +1,4 @@
+include LICENSE
+recursive-exclude * *.py[co]
+recursive-include template_admin/locale *
+recursive-include template_admin/static *

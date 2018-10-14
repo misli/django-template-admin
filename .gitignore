@@ -1,0 +1,10 @@
+*.egg-info
+*.pyc
+*.pyo
+*.swp
+*~
+/.tox
+/build
+/dist
+/db.sqlite3
+/env
