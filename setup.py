@@ -10,7 +10,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 
 setup(
     name='django-template-admin',
-    version='0.1.1',
+    version='1.0.0',
     description='Django application for advanced template management',
     long_description=long_description,
     author='Jakub Dorňák',
