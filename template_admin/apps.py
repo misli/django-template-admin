@@ -5,6 +5,6 @@ from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
 
 
-class TemplateEditorConfig(AppConfig):
+class TemplateAdminConfig(AppConfig):
     name = 'template_admin'
     verbose_name = _('Template Administration')

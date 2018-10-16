@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from difflib import HtmlDiff
 
+from django import forms
 from django.contrib import admin
-from django.template import engines
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,15 +25,12 @@ class TemplateAdmin(admin.ModelAdmin):
 
     @property
     def media(self):
-        m = super(TemplateAdmin, self).media
-        m.add_css({'all': ('template_admin/htmldiff.css',)})
-        return m
+        return super(TemplateAdmin, self).media + forms.Media(css={'all': ('template_admin/htmldiff.css',)})
 
     def save_model(self, request, obj, form, change):
         obj.original_default_content = obj.default_content if obj.enabled else None
         obj.default_content_changed = False
         obj.save()
-        engines.__init__()
 
     def default_content_readonly(self, obj):
         return '<textarea readonly rows="{}">{}</textarea>'.format(

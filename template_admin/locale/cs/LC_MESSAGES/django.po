@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-16 02:21+0200\n"
+"POT-Creation-Date: 2018-10-16 18:15+0200\n"
 "Last-Translator: Jakub Dorňák <jakub.dornak@misli.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -15,31 +15,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: admin.py:44 admin.py:58 models.py:14
+#: admin.py:41 admin.py:55 models.py:14
 msgid "default content"
 msgstr "výchozí obsah"
 
-#: admin.py:52 admin.py:68 models.py:15
+#: admin.py:49 admin.py:65 models.py:15
 msgid "original default content"
 msgstr "původní výchozí obsah"
 
-#: admin.py:59 models.py:13
+#: admin.py:56 models.py:13
 msgid "changed content"
 msgstr "změněný obsah"
 
-#: admin.py:62
+#: admin.py:59
 msgid "difference between default and changed content"
 msgstr "rozdíl mezi výchozím a změněným obsahem"
 
-#: admin.py:69
+#: admin.py:66
 msgid "current default content"
 msgstr "aktuální výchozí obsah"
 
-#: admin.py:72
+#: admin.py:69
 msgid "difference between original and current default content"
 msgstr "rozdíl mezi původním a aktuálním výchozím obsahem"
 
-#: apps.py:6
+#: apps.py:10
 msgid "Template Administration"
 msgstr "Správa šablon"
 

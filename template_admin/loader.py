@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from .models import Template as TemplateModel
 
-REFRESH_INTERVAL = int(getattr(settings, 'TEMPLATE_ADMIN_REFRESH_INTERVAL', '30'))
+REFRESH_INTERVAL = getattr(settings, 'TEMPLATE_ADMIN_REFRESH_INTERVAL', 30)
 
 
 class Loader(BaseLoader):
@@ -52,15 +52,15 @@ class Loader(BaseLoader):
                 if template_obj.default_content != default_content or template_obj.pk is None:
                     template_obj.default_content = default_content
                     template_obj.default_content_changed = (
-                        template_obj.original_default_content is not None
-                        and template_obj.default_content != template_obj.original_default_content
+                        template_obj.original_default_content is not None and
+                        template_obj.default_content != template_obj.original_default_content
                     )
                     template_obj.save()
 
                 # use template with changed content
                 if template_obj.enabled:
                     template = Template(template_obj.changed_content, origin, template_name, self.engine)
-            except (IntegrityError, ProgrammingError):
+            except (IntegrityError, ProgrammingError):  # pragma: no cover
                 # IntegrityError: already created in other thread
                 # ProgrammingError: called before (or during) migration
                 pass
