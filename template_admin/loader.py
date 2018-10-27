@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.db import transaction
-from django.db.utils import IntegrityError, OperationalError
+from django.db.utils import DatabaseError
 from django.template import Origin, Template, TemplateDoesNotExist
 from django.template.loaders.base import Loader as BaseLoader
 from django.utils import timezone
@@ -62,11 +62,9 @@ class Loader(BaseLoader):
                     # use template with changed content
                     if template_obj.enabled:
                         template = Template(template_obj.changed_content, origin, template_name, self.engine)
-            except IntegrityError:
-                # template already created in other thread
-                pass
-            except OperationalError:
-                # called before (or during) migration
+            except DatabaseError:
+                # IntegrityError: template already created in other thread
+                # OperationalError or ProgrammingError (depends on backend): called before (or during) migration
                 pass
 
         if template is None:
