@@ -6,6 +6,7 @@ import time
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.template import TemplateDoesNotExist, engines
 from django.template.loader import get_template
 from django.test import RequestFactory, TestCase
@@ -143,6 +144,33 @@ class TemplateLoaderTests(TestCase):
         self.assertRaises(
             TemplateDoesNotExist,
             lambda: get_template('new.html'),
+        )
+
+    def test_concurrency(self):
+        loader.REFRESH_INTERVAL = 60
+
+        # get_template returns default content
+        self.assertEqual(
+            get_template('template.html').template.source,
+            self.test_template_content,
+        )
+
+        # reset loader's cache
+        self.loader.template_objects = {}
+
+        # try to create duplicate entry
+        get_template('template.html')
+
+        # try to continue with some queries in this transaction (after IntegrityError)
+        Template.objects.create(template_name='new.html')
+
+    def test_not_migrated(self):
+        call_command('migrate', 'template_admin', 'zero')
+
+        # get_template returns default content
+        self.assertEqual(
+            get_template('template.html').template.source,
+            self.test_template_content,
         )
 
 
