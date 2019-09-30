@@ -6,6 +6,7 @@ import time
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.template import TemplateDoesNotExist, engines
 from django.template.loader import get_template
@@ -216,6 +217,21 @@ class TemplateAdminTests(TestCase):
 
         # check response code
         self.assertEqual(response.status_code, 200)
+
+    def test_model_clean(self):
+        # create Template object
+        template = Template()
+
+        # clean with invalid content
+        template.changed_content = '{% if content %}{{ content|safe }}{% else %}No content.'
+        self.assertRaises(ValidationError, template.clean)
+
+        # clean with valid content
+        template.changed_content = '{% if content %}{{ content|safe }}{% else %}No content.{% endif %}'
+        try:
+            template.clean()
+        except ValidationError:
+            self.fail('Template.clean() raised ValidationError with valid content.')
 
     def test_save_model(self):
         # get template from database
