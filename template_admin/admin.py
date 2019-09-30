@@ -6,6 +6,7 @@ from difflib import HtmlDiff
 from django import forms
 from django.contrib import admin
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Template
@@ -33,37 +34,33 @@ class TemplateAdmin(admin.ModelAdmin):
         obj.save()
 
     def default_content_readonly(self, obj):
-        return '<textarea readonly rows="{}">{}</textarea>'.format(
+        return mark_safe('<textarea readonly rows="{}">{}</textarea>'.format(
             len(obj.default_content.splitlines()),
             escape(obj.default_content),
-        )
-    default_content_readonly.allow_tags = True
+        ))
     default_content_readonly.short_description = _('default content')
 
     def original_default_content_readonly(self, obj):
-        return '<textarea readonly rows="{}">{}</textarea>'.format(
+        return mark_safe('<textarea readonly rows="{}">{}</textarea>'.format(
             len(obj.original_default_content.splitlines()),
             escape(obj.original_default_content),
-        )
-    original_default_content_readonly.allow_tags = True
+        ))
     original_default_content_readonly.short_description = _('original default content')
 
     def changed_content_diff(self, obj):
-        return HtmlDiff().make_table(
+        return mark_safe(HtmlDiff().make_table(
             obj.default_content.splitlines(),
             obj.changed_content.splitlines(),
             fromdesc=_('default content'),
             todesc=_('changed content'),
-        )
-    changed_content_diff.allow_tags = True
+        )) if obj.changed_content else '-'
     changed_content_diff.short_description = _('difference between default and changed content')
 
     def default_content_diff(self, obj):
-        return HtmlDiff().make_table(
+        return mark_safe(HtmlDiff().make_table(
             obj.original_default_content.split('\n')[:-1],
             obj.default_content.split('\n')[:-1],
             fromdesc=_('original default content'),
             todesc=_('current default content'),
-        ) if obj.default_content_changed else '-'
-    default_content_diff.allow_tags = True
+        )) if obj.default_content_changed else '-'
     default_content_diff.short_description = _('difference between original and current default content')
