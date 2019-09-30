@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.core.management import call_command
+from django.db import connection
 from django.template import TemplateDoesNotExist, engines
 from django.template.loader import get_template
 from django.test import RequestFactory, TestCase
@@ -166,7 +166,8 @@ class TemplateLoaderTests(TestCase):
         Template.objects.create(template_name='new.html')
 
     def test_not_migrated(self):
-        call_command('migrate', 'template_admin', 'zero')
+        with connection.cursor() as cursor:
+            cursor.execute('DROP TABLE ' + Template._meta.db_table)
 
         # get_template returns default content
         self.assertEqual(
