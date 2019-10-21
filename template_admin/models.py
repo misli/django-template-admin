@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template import Template as DjangoTemplate, TemplateSyntaxError
-from django.template.base import DebugLexer, Parser
+from django.template.base import UNKNOWN_SOURCE, DebugLexer, Origin, Parser
 from django.template.engine import Engine
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.safestring import mark_safe
@@ -39,7 +39,7 @@ class Template(models.Model):
             engine = Engine.get_default()
             lexer = DebugLexer(self.changed_content)
             tokens = lexer.tokenize()
-            parser = Parser(tokens, engine.template_libraries, engine.template_builtins)
+            parser = Parser(tokens, engine.template_libraries, engine.template_builtins, Origin(UNKNOWN_SOURCE))
             parser.parse()
         except TemplateSyntaxError as e:
             exception_info = template.get_exception_info(e, e.token)
