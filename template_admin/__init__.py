@@ -1,1 +1,1 @@
-default_app_config = 'template_admin.apps.TemplateAdminConfig'
+default_app_config = "template_admin.apps.TemplateAdminConfig"

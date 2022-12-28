@@ -7,5 +7,5 @@ except ImportError:
     from django.conf.urls import url as path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
 ]

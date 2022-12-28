@@ -9,26 +9,65 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Template',
+            name="Template",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('template_name', models.CharField(editable=False, max_length=250, unique=True, verbose_name='template name')),
-                ('enabled', models.BooleanField(default=False, verbose_name='enabled')),
-                ('changed_content', models.TextField(blank=True, default='', verbose_name='changed content')),
-                ('default_content', models.TextField(editable=False, null=True, verbose_name='default content')),
-                ('original_default_content', models.TextField(editable=False, null=True, verbose_name='original default content')),
-                ('default_content_changed', models.BooleanField(default=False, editable=False, verbose_name='default content changed')),
-                ('last_modified', models.DateTimeField(auto_now=True, db_index=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "template_name",
+                    models.CharField(
+                        editable=False,
+                        max_length=250,
+                        unique=True,
+                        verbose_name="template name",
+                    ),
+                ),
+                ("enabled", models.BooleanField(default=False, verbose_name="enabled")),
+                (
+                    "changed_content",
+                    models.TextField(
+                        blank=True, default="", verbose_name="changed content"
+                    ),
+                ),
+                (
+                    "default_content",
+                    models.TextField(
+                        editable=False, null=True, verbose_name="default content"
+                    ),
+                ),
+                (
+                    "original_default_content",
+                    models.TextField(
+                        editable=False,
+                        null=True,
+                        verbose_name="original default content",
+                    ),
+                ),
+                (
+                    "default_content_changed",
+                    models.BooleanField(
+                        default=False,
+                        editable=False,
+                        verbose_name="default content changed",
+                    ),
+                ),
+                ("last_modified", models.DateTimeField(auto_now=True, db_index=True)),
             ],
             options={
-                'verbose_name': 'template',
-                'verbose_name_plural': 'templates',
-                'ordering': ('template_name',),
+                "verbose_name": "template",
+                "verbose_name_plural": "templates",
+                "ordering": ("template_name",),
             },
         ),
     ]

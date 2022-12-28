@@ -17,17 +17,18 @@ from template_admin.models import Template
 
 
 class TemplateLoaderTests(TestCase):
-
     def __init__(self, *args, **kwargs):
         super(TemplateLoaderTests, self).__init__(*args, **kwargs)
 
         # get default template content
         self.test_template_content = open(
-            os.path.join(settings.BASE_DIR, 'tests', 'templates', 'template.html')
+            os.path.join(settings.BASE_DIR, "tests", "templates", "template.html")
         ).read()
 
         # prepare changed template content
-        self.test_template_changed_content = self.test_template_content.replace('h1', 'h2')
+        self.test_template_changed_content = self.test_template_content.replace(
+            "h1", "h2"
+        )
 
         # get template loader instance
         self.loader = engines.all()[0].engine.template_loaders[0]
@@ -41,12 +42,12 @@ class TemplateLoaderTests(TestCase):
 
         # get_template returns default content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_content,
         )
 
         # get template from database
-        template = Template.objects.get(template_name='template.html')
+        template = Template.objects.get(template_name="template.html")
 
         # template is disabled by default
         self.assertFalse(template.enabled)
@@ -64,7 +65,7 @@ class TemplateLoaderTests(TestCase):
 
         # get_template returns changed content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_changed_content,
         )
 
@@ -74,7 +75,7 @@ class TemplateLoaderTests(TestCase):
 
         # get_template returns default content again
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_content,
         )
 
@@ -83,12 +84,12 @@ class TemplateLoaderTests(TestCase):
 
         # get_template returns default content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_content,
         )
 
         # get template from database
-        template = Template.objects.get(template_name='template.html')
+        template = Template.objects.get(template_name="template.html")
 
         # add changed content to database
         template.changed_content = self.test_template_changed_content
@@ -97,7 +98,7 @@ class TemplateLoaderTests(TestCase):
 
         # get_template still returns default content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_content,
         )
 
@@ -106,7 +107,7 @@ class TemplateLoaderTests(TestCase):
 
         # get_template returns changed content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_changed_content,
         )
 
@@ -116,21 +117,21 @@ class TemplateLoaderTests(TestCase):
         # template does not exist
         self.assertRaises(
             TemplateDoesNotExist,
-            lambda: get_template('new.html'),
+            lambda: get_template("new.html"),
         )
 
         # create new template in database
-        template = Template.objects.get(template_name='new.html')
+        template = Template.objects.get(template_name="new.html")
         template.changed_content = self.test_template_changed_content
         template.enabled = True
         template.save()
 
         # check template's string representation
-        self.assertEqual(str(template), 'new.html, enabled')
+        self.assertEqual(str(template), "new.html, enabled")
 
         # get_template returns changed content
         self.assertEqual(
-            get_template('new.html').template.source,
+            get_template("new.html").template.source,
             self.test_template_changed_content,
         )
 
@@ -139,12 +140,12 @@ class TemplateLoaderTests(TestCase):
         template.save()
 
         # check template's string representation
-        self.assertEqual(str(template), 'new.html, disabled')
+        self.assertEqual(str(template), "new.html, disabled")
 
         # template again does not exist
         self.assertRaises(
             TemplateDoesNotExist,
-            lambda: get_template('new.html'),
+            lambda: get_template("new.html"),
         )
 
     def test_concurrency(self):
@@ -152,7 +153,7 @@ class TemplateLoaderTests(TestCase):
 
         # get_template returns default content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_content,
         )
 
@@ -160,24 +161,23 @@ class TemplateLoaderTests(TestCase):
         self.loader.template_objects = {}
 
         # try to create duplicate entry
-        get_template('template.html')
+        get_template("template.html")
 
         # try to continue with some queries in this transaction (after IntegrityError)
-        Template.objects.create(template_name='new.html')
+        Template.objects.create(template_name="new.html")
 
     def test_not_migrated(self):
         with connection.cursor() as cursor:
-            cursor.execute('DROP TABLE ' + Template._meta.db_table)
+            cursor.execute("DROP TABLE " + Template._meta.db_table)
 
         # get_template returns default content
         self.assertEqual(
-            get_template('template.html').template.source,
+            get_template("template.html").template.source,
             self.test_template_content,
         )
 
 
 class TemplateAdminTests(TestCase):
-
     def __init__(self, *args, **kwargs):
         super(TemplateAdminTests, self).__init__(*args, **kwargs)
 
@@ -186,9 +186,9 @@ class TemplateAdminTests(TestCase):
 
     def setUp(self):
         # prepare request object
-        self.request = RequestFactory().get('/')
+        self.request = RequestFactory().get("/")
         self.request.user = User.objects.create_user(
-            username='admin',
+            username="admin",
             is_superuser=True,
         )
         self.request.session = {}
@@ -200,7 +200,7 @@ class TemplateAdminTests(TestCase):
         self.loader.template_objects = {}
 
         # ensure some template in database
-        get_template('template.html')
+        get_template("template.html")
 
     def test_changelist_view(self):
         # get response from TemplateAdmin.changelist_view
@@ -214,7 +214,9 @@ class TemplateAdminTests(TestCase):
         template = Template.objects.first()
 
         # get response from TemplateAdmin.change_view
-        response = self.template_admin.change_view(self.request, str(template.id)).render()
+        response = self.template_admin.change_view(
+            self.request, str(template.id)
+        ).render()
 
         # check response code
         self.assertEqual(response.status_code, 200)
@@ -224,15 +226,19 @@ class TemplateAdminTests(TestCase):
         template = Template()
 
         # clean with invalid content
-        template.changed_content = '{% if content %}{{ content|safe }}{% else %}No content.'
+        template.changed_content = (
+            "{% if content %}{{ content|safe }}{% else %}No content."
+        )
         self.assertRaises(ValidationError, template.clean)
 
         # clean with valid content
-        template.changed_content = '{% if content %}{{ content|safe }}{% else %}No content.{% endif %}'
+        template.changed_content = (
+            "{% if content %}{{ content|safe }}{% else %}No content.{% endif %}"
+        )
         try:
             template.clean()
         except ValidationError:
-            self.fail('Template.clean() raised ValidationError with valid content.')
+            self.fail("Template.clean() raised ValidationError with valid content.")
 
     def test_save_model(self):
         # get template from database
