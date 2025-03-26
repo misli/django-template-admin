@@ -7,7 +7,7 @@ from django.template import Template as DjangoTemplate, TemplateSyntaxError
 from django.template.base import UNKNOWN_SOURCE, DebugLexer, Origin, Parser
 from django.template.engine import Engine
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class Template(models.Model):
